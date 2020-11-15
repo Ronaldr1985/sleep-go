@@ -58,15 +58,19 @@ func main() {
 				for i, x := range denominator { // Loop through denominators
 					switch string(x) {
 					case "m":
-						fmt.Printf("Sleeping for %s minutes", arg[denominatorplace[count]:denominatorplace[i]])
+						fmt.Println("\nCount variable is equal to:", count)
+						fmt.Println("denominatorplace[i] variable is equal to:", denominatorplace[0])
+						fmt.Println("Arg variable is equal to:", arg)
+						fmt.Println("Variable i is equal to:", i)
+						fmt.Printf("Sleeping for %s minutes\n", arg[count:denominatorplace[i]])
 					case "s":
-						// fmt.Println("\nCount variable is equal to:", count)
-						// fmt.Println("denominatorplace[i] variable is equal to:", denominatorplace[0])
-						// fmt.Println("Time array is equal to:", time)
-						// fmt.Println("Variable i is equal to:", i)
+						fmt.Println("\nCount variable is equal to:", count)
+						fmt.Println("denominatorplace[i] variable is equal to:", denominatorplace[0])
+						fmt.Println("Arg variable is equal to:", arg)
+						fmt.Println("Variable i is equal to:", i)
 						// var seconds string
 						// seconds = strings.Join(time[count:denominatorplace[0]], " ")
-						fmt.Printf("Sleeping for %s seconds", arg[(denominatorplace[count]+1):denominatorplace[i]])
+						fmt.Printf("Sleeping for %s seconds\n", arg[(denominatorplace[count]+1):denominatorplace[i]])
 					}
 				}
 			}
