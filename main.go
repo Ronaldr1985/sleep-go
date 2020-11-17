@@ -94,11 +94,11 @@ func main() {
 				temp, _ = strconv.Atoi(getValueFromArray(time, i))
 				sleep = (sleep) + (temp * 60)
 			case "s":
-				fmt.Printf("Sleeping for %s seconds.\n", time[i:count])
+				fmt.Printf("Sleeping for %s seconds.\n", getValueFromArray(time, i))
 				temp, _ = strconv.Atoi(getValueFromArray(time, i))
 				sleep = (sleep) + (temp)
 			case "ms":
-				fmt.Printf("Sleeping for %s milliseconds.\n", time[i:count])
+				fmt.Printf("Sleeping for %s milliseconds.\n", getValueFromArray(time, i))
 				temp, _ = strconv.Atoi(getValueFromArray(time, i))
 				sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
 			}
