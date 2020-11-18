@@ -18,6 +18,14 @@ func getValueFromArray(arr []string, position int) string {
 	return arr[position]
 }
 
+func sleepMilliseconds(milliseconds int64) {
+	time.Sleep(time.Duration(milliseconds) * time.Millisecond)
+}
+
+func sleepSeconds(seconds int64) {
+	time.Sleep(time.Duration(seconds) * time.Second)
+}
+
 func writeHelp() {
 	fmt.Printf("A simple countdown program written in Go.\n")
 	os.Exit(0)
@@ -39,7 +47,7 @@ func main() {
 	seconds := "s"
 	milliseconds := "ms"
 	var sleep int = 0 // Time to sleep in milliseconds
-	var time []string
+	var amount []string
 	var denominator []string
 	var previouscharacter string
 	if len(os.Args) > 1 {
@@ -48,24 +56,26 @@ func main() {
 				for _, character := range arg {
 					if strings.Contains(string(character), seconds) {
 						if strings.Contains(previouscharacter, minutes) == true {
-							fmt.Println("Milliseconds were passed")
+							// fmt.Println("Milliseconds were passed")
 							if len(denominator) > 0 {
 								denominator = denominator[:len(denominator)-1]
 								denominator = append(denominator, milliseconds)
 							} else {
 								denominator = append(denominator, milliseconds)
 							}
+						} else {
+							denominator = append(denominator, string(character))
 						}
 					}
 					if strings.Contains(string(character), hours) || strings.Contains(string(character), minutes) {
 						denominator = append(denominator, string(character))
 					}
-					if timeRegex.MatchString(string(character)) == true { // Match string again numbers and add it to time array
+					if timeRegex.MatchString(string(character)) == true { // Match string again numbers and add it to amountarray
 						if timeRegex.MatchString(previouscharacter) {
-							time = time[:len(time)-1]
-							time = append(time, string(previouscharacter+string(character)))
+							amount = amount[:len(amount)-1]
+							amount = append(amount, string(previouscharacter+string(character)))
 						} else {
-							time = append(time, string(character))
+							amount = append(amount, string(character))
 						}
 					}
 					previouscharacter = string(character)
@@ -77,33 +87,39 @@ func main() {
 	}
 	var count int = 1
 	var temp int
-	if len(time) > 0 && len(denominator) > 0 {
+	var msTrue bool
+	if len(amount) > 0 && len(denominator) > 0 {
 		for i, x := range denominator {
 			if i > len(denominator) {
 				break
 			}
 			switch string(x) {
 			case "h":
-				// fmt.Printf("Sleeping for %s hours.\n", time[i:count])
-				// fmt.Printf("Sleeping for %s hours.\n", getValueFromArray(time, i))
-				temp, _ = strconv.Atoi(getValueFromArray(time, i))
+				// fmt.Printf("Sleeping for %s hours.\n", getValueFromArray(amount, i))
+				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + ((temp * 60) * 60)
 			case "m":
-				// fmt.Printf("Sleeping for %s minutes.\n", time[i:count])
-				// fmt.Printf("Sleeping for %s minutes.\n", getValueFromArray(time, i))
-				temp, _ = strconv.Atoi(getValueFromArray(time, i))
+				// fmt.Printf("Sleeping for %s minutes.\n", getValueFromArray(amount, i))
+				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp * 60)
 			case "s":
-				fmt.Printf("Sleeping for %s seconds.\n", getValueFromArray(time, i))
-				temp, _ = strconv.Atoi(getValueFromArray(time, i))
+				// fmt.Printf("Sleeping for %s seconds.\n", getValueFromArray(amount, i))
+				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp)
 			case "ms":
-				fmt.Printf("Sleeping for %s milliseconds.\n", getValueFromArray(time, i))
-				temp, _ = strconv.Atoi(getValueFromArray(time, i))
+				// fmt.Printf("Sleeping for %s milliseconds.\n", getValueFromArray(amount, i))
+				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
+				msTrue = true
 			}
 			count++
 		}
 	}
-	fmt.Printf("Sleeping for %d seconds", sleep) // This isn't dynamic because it doesn't need to be, as it's just here for testing, and to work out the math of the above case statement
+	if msTrue == true {
+		fmt.Printf("Sleeping for %d milliseconds", sleep)
+		sleepMilliseconds(int64(sleep))
+	} else {
+		fmt.Printf("Sleeping for %d seconds", sleep)
+		sleepSeconds(int64(sleep))
+	}
 }
