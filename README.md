@@ -11,6 +11,7 @@ First things first compile the application:
  And then run it passing it the time you want to sleep for. For example:
 
 So to sleep for 5 minutes and 30 seconds
+
     ./main 5m30s 
 
 Please note this application is still very much in **testing**, and is still being developed.
