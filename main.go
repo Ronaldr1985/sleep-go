@@ -31,15 +31,6 @@ func writeHelp() {
 	os.Exit(0)
 }
 
-func countdown(minutes, seconds int64) {
-	fmt.Printf("Seconds before adding minutes, %d \n", seconds)
-	fmt.Printf("Minutes: %d \n", minutes)
-	seconds += minutes * 60
-	fmt.Printf("Seconds after addition: %d \n", seconds)
-	time.Sleep(time.Duration(seconds) * time.Second)
-	fmt.Printf("Time's up\n")
-}
-
 func main() {
 	timeRegex, _ := regexp.Compile("[0-9]")
 	hours := "h"
@@ -95,19 +86,15 @@ func main() {
 			}
 			switch string(x) {
 			case "h":
-				// fmt.Printf("Sleeping for %s hours.\n", getValueFromArray(amount, i))
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + ((temp * 60) * 60)
 			case "m":
-				// fmt.Printf("Sleeping for %s minutes.\n", getValueFromArray(amount, i))
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp * 60)
 			case "s":
-				// fmt.Printf("Sleeping for %s seconds.\n", getValueFromArray(amount, i))
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp)
 			case "ms":
-				// fmt.Printf("Sleeping for %s milliseconds.\n", getValueFromArray(amount, i))
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
 				msTrue = true
