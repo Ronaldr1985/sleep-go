@@ -94,7 +94,7 @@ func main() {
 			case "s":
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp)
-			case "ms":
+			case "ms": // The way that milliseconds works if it isn't the last one it won't probably convert everything to milliesconds
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
 				msTrue = true
