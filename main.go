@@ -95,14 +95,13 @@ func main() {
 				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
 				sleep = (sleep) + (temp)
 			case "ms":
-				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
-				sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
 				msTrue = true
 			}
 			count++
 		}
 	}
 	if msTrue == true {
+		sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
 		fmt.Printf("Sleeping for %d milliseconds", sleep)
 		sleepMilliseconds(int64(sleep))
 	} else {
