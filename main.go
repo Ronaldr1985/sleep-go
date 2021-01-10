@@ -101,11 +101,11 @@ func main() {
 		}
 	}
 	if msTrue == true {
-		sleep = (sleep * 1000) + (temp) // Previously sleep was equal to seconds so convert it to milliseconds and then add milliseconds
-		fmt.Printf("Sleeping for %d milliseconds", sleep)
+		sleep = (sleep * 1000) + (temp)
+		// fmt.Printf("Sleeping for %d milliseconds", sleep)
 		sleepMilliseconds(int64(sleep))
 	} else {
-		fmt.Printf("Sleeping for %d seconds", sleep)
+		// fmt.Printf("Sleeping for %d seconds", sleep)
 		sleepSeconds(int64(sleep))
 	}
 }
