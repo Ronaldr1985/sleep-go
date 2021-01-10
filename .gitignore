@@ -1,4 +1,5 @@
-go.sum
 main.exe
+countdown-timer.exe
+go.sum
 tests/
 old_revisions/
