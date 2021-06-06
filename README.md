@@ -25,3 +25,4 @@ If you have Go installed you can run
 ## Bugs
 
 If you don't pass milliseconds to the program first then it unforunately won't work and you will get undesired results. **Fixed on 09/01/2021**
+Milliseconds don't work
