@@ -79,6 +79,7 @@ func main() {
 	var count int = 1
 	var temp int
 	var msTrue bool
+	var msPosition int
 	if len(amount) > 0 && len(denominator) > 0 {
 		for i, x := range denominator {
 			if i > len(denominator) {
@@ -96,16 +97,18 @@ func main() {
 				sleep = (sleep) + (temp)
 			case "ms":
 				msTrue = true
+				msPosition = i
 			}
 			count++
 		}
 	}
 	if msTrue == true {
 		sleep = (sleep * 1000) + (temp)
-		// fmt.Printf("Sleeping for %d milliseconds", sleep)
+		temp, _ = strconv.Atoi(getValueFromArray(amount, msPosition))
+		fmt.Println("Test: ", getValueFromArray(amount, msPosition))
+		sleep = sleep + temp
 		sleepMilliseconds(int64(sleep))
 	} else {
-		// fmt.Printf("Sleeping for %d seconds", sleep)
 		sleepSeconds(int64(sleep))
 	}
 }
