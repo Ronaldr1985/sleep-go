@@ -1,4 +1,3 @@
-module github.com/ronaldr1985/countdown-timer
+module sleep-go
 
-go 1.15
-
+go 1.16

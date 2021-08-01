@@ -2,113 +2,115 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
-func fatal(err error) {
-	fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
-	os.Exit(1)
+func after(value string, match string) string {
+	pos := strings.LastIndex(value, match)
+	if pos == -1 {
+		return ""
+	}
+	adjustedPos := pos + len(match)
+	if adjustedPos >= len(value) {
+		return ""
+	}
+	return value[adjustedPos:len(value)]
 }
 
-func getValueFromArray(arr []string, position int) string {
-	return arr[position]
+func write_help(exit_value int) {
+	if exit_value == 0 {
+		fmt.Printf("Usage: sleep-go NUMBER[SUFFIX]..\n\tor: sleep-go OPTION\nPause for NUMBER of seconds.  SUFFIX may be 's' for seconds (the default), 'm' for minutes, 'h' for hours or 'd' for days.  Given two or more arguments pause for the sum of all the values.\n\n\t--help     display this help and exit\n\t--version  output version information and exit\n\n")
+	} else {
+		fmt.Fprintf(os.Stderr, "sleep-go: invalid option -- 'sleep-go'\nTry '%s --help' for more information\n", string(os.Args[1][1]))
+	}
+	os.Exit(exit_value)
 }
 
-func sleepMilliseconds(milliseconds int64) {
-	time.Sleep(time.Duration(milliseconds) * time.Millisecond)
-}
-
-func sleepSeconds(seconds int64) {
-	time.Sleep(time.Duration(seconds) * time.Second)
-}
-
-func writeHelp() {
-	fmt.Printf("A simple countdown program written in Go.\n")
-	os.Exit(0)
+func write_version() {
+	fmt.Printf("%s 0.1\nLicense BSD-2-Clause\n\nWritten by Ronald 1985.\n", after(os.Args[0], "/"))
 }
 
 func main() {
-	timeRegex, _ := regexp.Compile("[0-9]")
-	hours := "h"
-	minutes := "m"
-	seconds := "s"
-	milliseconds := "ms"
-	var sleep int = 0 // Time to sleep in milliseconds
-	var amount []string
-	var denominator []string
-	var previouscharacter string
 	if len(os.Args) > 1 {
-		for i, arg := range os.Args {
+		var err error
+		var current_number, next_character string
+		var seconds, tmp_number float64
+		if os.Args[1][0] == '-' {
+			if unicode.IsLetter(rune(os.Args[1][1])) {
+				write_help(1)
+			} else if os.Args[1][1] == '-' {
+				if strings.Compare(os.Args[1][2:], "help") == 0 {
+					write_help(0)
+				} else if strings.Compare(os.Args[1][2:], "version") == 0 {
+					write_version()
+				} else {
+					write_help(1)
+				}
+			}
+			os.Exit(1)
+		}
+		for i, argument := range os.Args {
 			if i > 0 {
-				for _, character := range arg {
-					if strings.Contains(string(character), seconds) {
-						if strings.Contains(previouscharacter, minutes) == true {
-							// fmt.Println("Milliseconds were passed")
-							if len(denominator) > 0 {
-								denominator = denominator[:len(denominator)-1]
-								denominator = append(denominator, milliseconds)
-							} else {
-								denominator = append(denominator, milliseconds)
+				for i, ch := range argument {
+					if i == 0 {
+						i = 1
+					}
+					if unicode.IsNumber(ch) {
+						current_number += string(ch)
+					} else if !unicode.IsNumber(ch) && i == 1 && ch != '.' {
+						write_help(1)
+					}
+					switch ch {
+					case 'd':
+						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						if err != nil {
+							log.Println("error: ", err)
+						}
+						seconds += (tmp_number * 24 * 60 * 60)
+						current_number = ""
+					case 'h':
+						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						if err != nil {
+							log.Fatal("error ", err)
+						}
+						seconds += (tmp_number * 60 * 60)
+						current_number = ""
+					case 'm':
+						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						if err != nil {
+							log.Fatal("error ", err)
+						}
+						seconds += tmp_number * 60
+						current_number = ""
+					case 's':
+						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						if err != nil {
+							log.Fatal("error ", err)
+						}
+						seconds += tmp_number
+						current_number = ""
+					case '.':
+						current_number += "."
+					default:
+						if _, err := strconv.Atoi(next_character); err != nil && i == len(argument) {
+							tmp_number, err = strconv.ParseFloat(current_number, 8)
+							if err != nil {
+								log.Fatal("error ", err)
 							}
-						} else {
-							denominator = append(denominator, string(character))
+							seconds += tmp_number
+							current_number = ""
+						} else if unicode.IsLetter(ch) {
+							write_help(1)
 						}
 					}
-					if strings.Contains(string(character), hours) || strings.Contains(string(character), minutes) {
-						denominator = append(denominator, string(character))
-					}
-					if timeRegex.MatchString(string(character)) == true { // Match string again numbers and add it to amountarray
-						if timeRegex.MatchString(previouscharacter) {
-							amount = amount[:len(amount)-1]
-							amount = append(amount, string(previouscharacter+string(character)))
-						} else {
-							amount = append(amount, string(character))
-						}
-					}
-					previouscharacter = string(character)
 				}
 			}
 		}
-	} else {
-		writeHelp()
-	}
-	var count int = 1
-	var temp int
-	var msTrue bool
-	var msPosition int
-	if len(amount) > 0 && len(denominator) > 0 {
-		for i, x := range denominator {
-			if i > len(denominator) {
-				break
-			}
-			switch string(x) {
-			case "h":
-				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
-				sleep = (sleep) + ((temp * 60) * 60)
-			case "m":
-				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
-				sleep = (sleep) + (temp * 60)
-			case "s":
-				temp, _ = strconv.Atoi(getValueFromArray(amount, i))
-				sleep = (sleep) + (temp)
-			case "ms":
-				msTrue = true
-				msPosition = i
-			}
-			count++
-		}
-	}
-	if msTrue == true {
-		sleep = (sleep * 1000) + (temp)
-		temp, _ = strconv.Atoi(getValueFromArray(amount, msPosition))
-		fmt.Println("Test: ", getValueFromArray(amount, msPosition))
-		sleep = sleep + temp
-		sleepMilliseconds(int64(sleep))
-	} else {
-		sleepSeconds(int64(sleep))
+		time.Sleep(time.Duration(seconds) * time.Second)
 	}
 }

@@ -1,6 +1,6 @@
-# Countdown Timer
+# sleep-go
 
-A simple countdown timer written in Go, it was built to be an alternative to the sleep command on Linux.
+A simple countdown timer written in Go, it was built to be an alternative to the sleep on Linux with more features.  Should also work on Windows.
 
 ## Usage
 
@@ -22,10 +22,3 @@ If you have Go installed you can run
 
     go get -u github.com/ronaldr1985/countdown-timer
 
-## Bugs
-
-If you don't pass milliseconds to the program first then it unforunately won't work and you will get undesired results. **Fixed on 09/01/2021**
-
-Milliseconds don't work.
-
-If you pass more than 4 numbers for example 2000ms then it only takes the last two.
