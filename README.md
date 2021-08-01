@@ -12,7 +12,7 @@ First things first compile the application:
 
 So to sleep for 5 minutes and 30 seconds
 
-    ./countdown-timer 5m30s 
+    sleep-go 5m30s 
 
 Please note this application is still very much in **testing**, and is still being developed.
 
