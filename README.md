@@ -20,5 +20,5 @@ Please note this application is still very much in **testing**, and is still bei
 
 If you have Go installed you can run
 
-    go get -u github.com/ronaldr1985/countdown-timer
+    go get -u github.com/ronaldr1985/sleep-go
 
