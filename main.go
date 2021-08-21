@@ -26,7 +26,7 @@ func write_help(exit_value int) {
 	if exit_value == 0 {
 		fmt.Printf("Usage: sleep-go NUMBER[SUFFIX]..\n\tor: sleep-go OPTION\nPause for NUMBER of seconds.  SUFFIX may be 's' for seconds (the default), 'm' for minutes, 'h' for hours or 'd' for days.  Given two or more arguments pause for the sum of all the values.\n\n\t--help     display this help and exit\n\t--version  output version information and exit\n\n")
 	} else {
-		fmt.Fprintf(os.Stderr, "sleep-go: invalid option -- 'sleep-go'\nTry '%s --help' for more information\n", string(os.Args[1][1]))
+		fmt.Fprintf(os.Stderr, "sleep-go: invalid option -- '%s'\nTry 'sleep-go --help' for more information\n", string(os.Args[1][1]))
 	}
 	os.Exit(exit_value)
 }
@@ -41,7 +41,10 @@ func main() {
 		var current_number, next_character string
 		var seconds, tmp_number float64
 		if os.Args[1][0] == '-' {
-			if unicode.IsLetter(rune(os.Args[1][1])) {
+			if len(os.Args[1]) == 1 {
+				fmt.Fprintf(os.Stderr, "sleep-go: invalid option -- '%s'\nTry 'sleep-go --help' for more information\n", string(os.Args[1][0]))
+				os.Exit(1)
+			} else if unicode.IsLetter(rune(os.Args[1][1])) {
 				write_help(1)
 			} else if os.Args[1][1] == '-' {
 				if strings.Compare(os.Args[1][2:], "help") == 0 {
@@ -57,12 +60,10 @@ func main() {
 		for i, argument := range os.Args {
 			if i > 0 {
 				for i, ch := range argument {
-					if i == 0 {
-						i = 1
-					}
 					if unicode.IsNumber(ch) {
 						current_number += string(ch)
-					} else if !unicode.IsNumber(ch) && i == 1 && ch != '.' {
+					} else if unicode.IsLetter(ch) && i+1 == 1 {
+						fmt.Println("I'm here")
 						write_help(1)
 					}
 					switch ch {
