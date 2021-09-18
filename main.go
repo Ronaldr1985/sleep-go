@@ -2,25 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
 )
-
-func after(value string, match string) string {
-	pos := strings.LastIndex(value, match)
-	if pos == -1 {
-		return ""
-	}
-	adjustedPos := pos + len(match)
-	if adjustedPos >= len(value) {
-		return ""
-	}
-	return value[adjustedPos:len(value)]
-}
 
 func write_help(exit_value int) {
 	if exit_value == 0 {
@@ -32,7 +19,7 @@ func write_help(exit_value int) {
 }
 
 func write_version() {
-	fmt.Printf("%s 0.1\nLicense BSD-2-Clause\n\nWritten by Ronald 1985.\n", after(os.Args[0], "/"))
+	fmt.Printf("sleep-go 0.1\nLicense BSD-2-Clause\n\nWritten by Ronald 1985.\n")
 }
 
 func main() {
@@ -63,35 +50,34 @@ func main() {
 					if unicode.IsNumber(ch) {
 						current_number += string(ch)
 					} else if unicode.IsLetter(ch) && i+1 == 1 {
-						fmt.Println("I'm here")
 						write_help(1)
 					}
 					switch ch {
 					case 'd':
-						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						tmp_number, err = strconv.ParseFloat(current_number, 32)
 						if err != nil {
-							log.Println("error: ", err)
+							fmt.Fprintln(os.Stderr, "sleep-go: ", err)
 						}
 						seconds += (tmp_number * 24 * 60 * 60)
 						current_number = ""
 					case 'h':
-						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						tmp_number, err = strconv.ParseFloat(current_number, 32)
 						if err != nil {
-							log.Fatal("error ", err)
+							fmt.Fprintln(os.Stderr, "sleep-go: ", err)
 						}
 						seconds += (tmp_number * 60 * 60)
 						current_number = ""
 					case 'm':
-						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						tmp_number, err = strconv.ParseFloat(current_number, 32)
 						if err != nil {
-							log.Fatal("error ", err)
+							fmt.Fprintln(os.Stderr, "sleep-go: ", err)
 						}
 						seconds += tmp_number * 60
 						current_number = ""
 					case 's':
-						tmp_number, err = strconv.ParseFloat(current_number, 8)
+						tmp_number, err = strconv.ParseFloat(current_number, 32)
 						if err != nil {
-							log.Fatal("error ", err)
+							fmt.Fprintln(os.Stderr, "sleep-go: ", err)
 						}
 						seconds += tmp_number
 						current_number = ""
@@ -99,9 +85,9 @@ func main() {
 						current_number += "."
 					default:
 						if _, err := strconv.Atoi(next_character); err != nil && i == len(argument) {
-							tmp_number, err = strconv.ParseFloat(current_number, 8)
+							tmp_number, err = strconv.ParseFloat(current_number, 32)
 							if err != nil {
-								log.Fatal("error ", err)
+								fmt.Fprintln(os.Stderr, "sleep-go: ", err)
 							}
 							seconds += tmp_number
 							current_number = ""
