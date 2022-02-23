@@ -14,8 +14,6 @@ So to sleep for 5 minutes and 30 seconds
 
     sleep-go 5m30s 
 
-Please note this application is still very much in **testing**, and is still being developed.
-
 ## Installation
 
 If you have Go installed you can run
